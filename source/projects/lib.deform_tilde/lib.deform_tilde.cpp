@@ -118,7 +118,7 @@ public:
         // Region of poly_intervals that sample_in falls into.
         //   region = 0 means sample_in is in [-1,x1].
         //   region = pieces means sample_in is in [xpieces, 1].
-        int region; 
+        int region = 0;
 
         for (int i = 0; i < pieces; i++) {  // sets region based on sample_in value
             if (sample_in < poly_intervals[i+1]) {
