@@ -8,7 +8,6 @@
 #include <cmath>
 #include <vector>
 #include "c74_min.h"
-#include "NumCpp.hpp"
 
 using namespace c74::min;
 
