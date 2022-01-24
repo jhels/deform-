@@ -14,7 +14,7 @@ git submodule update --init --recursive
 	cd build
 	cmake -G Xcode ..
 	```
-2. Open up either `build/Min-Externals.xcodeproj` or the .xcodeproj for a specific external (e.g. `build/source/lib.deform_tilde/lib.deform_tilde.xcodeproj`) in Xcode.
+2. Open up either `build/Min-Externals.xcodeproj` or the .xcodeproj for a specific external (e.g. `build/source/projects/lib.deform_tilde/lib.deform_tilde.xcodeproj`) in Xcode.
 3. Set the build target to be 'Any Mac (Intel, Apple Silicon)'.
 4. Press build. The compiled externals can be found in `externals/`.
 
@@ -26,5 +26,5 @@ git submodule update --init --recursive
 	cd build
 	cmake -G "Visual Studio 16 2019" ..
 	```
-2. Open up one of the Visual Studo project files, either the main one in `build/` or one for a specific external (e.g. in `build/source/lib.deform_tilde/`).
+2. Open up one of the Visual Studo project files, either the main one in `build/` or one for a specific external (e.g. in `build/source/projects/lib.deform_tilde/`).
 3. In the menu bar, click something along the lines of 'Build > Run Build'. The compiled externals can be found in `externals/`.

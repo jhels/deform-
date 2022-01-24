@@ -16,9 +16,9 @@ include(${C74_MIN_API_DIR}/script/min-pretarget.cmake)
 include_directories( 
 	"${C74_INCLUDES}"
 	# "${CMAKE_SOURCE_DIR}/source/projects/lib.deform_tilde/NumCpp/include"
-	"./NumCpp/include"
+	# "./NumCpp/include"
 	# "${CMAKE_SOURCE_DIR}/source/projects/lib.deform_tilde/boost-headers-only"
-	"./boost-headers-only"
+	# "./boost-headers-only"
 )
 
 
