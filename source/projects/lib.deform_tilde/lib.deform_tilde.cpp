@@ -8,7 +8,6 @@
 #include <cmath>
 #include <vector>
 #include "c74_min.h"
-#include "NumCpp.hpp"
 
 using namespace c74::min;
 
@@ -17,10 +16,12 @@ private:
     // int i_seed;
     static const int pieces = 10;                       // number of different polynomials to stitch together
     static const int sequence_length = 50;              // length of function sequence. 0 means identity function only.
-    static const int degree = 5;                        // max degree of polynomials, too large might cause clicks. 0 = constant.
-    const number coefficient_range[2] = {-1, 1}; // range of polynomial coefficients, too large might cause clicks.
+    static const int degree = 10;                        // max degree of polynomials, too large might cause clicks. 0 = constant.
+    const number coefficient_range[2] = {-10, 10}; // range of polynomial coefficients, too large might cause clicks.
     number poly_intervals[pieces+1];             // stores joining points x1,x2,...,x_pieces of polys
     number coefficients[pieces][degree+1][sequence_length+1]; // stores matrix of poly coefficients, initialised at 0.
+    number endpoint_one[pieces-1];
+    number endpoint_two[pieces-1];
 
     number get_random(number a, number b) {
         static std::default_random_engine e;
@@ -68,28 +69,40 @@ public:
                 coefficients[i][1][0] = 1;
             }
 
-            for (int i = 0; i < pieces; i++){           //sets final row fn to random values in chosen coefficient_range
-                for (int j = 0; j < degree + 1; j++){
+            for (int i = 0; i < pieces; i++) {           //sets final row fn to random values in chosen coefficient_range
+                for (int j = 0; j < degree + 1; j++) {
                     coefficients[i][j][sequence_length] = get_random(coefficient_range[0], coefficient_range[1]);
                 }
             }
+                    
+            for (int i = 0; i < pieces - 1; i++) {
+                for (int j = 0; j < degree + 1; j++) {
+                    endpoint_one[i] += coefficients[i][j][sequence_length] * std::pow(poly_intervals[i + 1], j);  // a_i * x^i
+                    endpoint_two[i] += coefficients[i][j][sequence_length] * std::pow(poly_intervals[i + 1], j);  // a_i * x^i
+                }
+            }
+
+            for (int i = 0; i < pieces - 1; i++) {
+                coefficients[i][degree][sequence_length] -= endpoint_one[i] - endpoint_two[i]; //glues next piece continuously onto previous piece
+            }
+
 
             // RESCALE COEFFICIENT MATRIX (UNFINISHED)
 
             // We need to find max(|f|) so we can rescale the polynomial to have max magnitude 1.
             // This value is either at endpoints or at turning points.
 
-            // number endpoints_out[2] = {0, 0};
-            // number max_abs_f = 0;
+            // double endpoints_out[2] = {0, 0};
+            // double max_abs_f = 0;
             // for (int i = 0; i < degree + 1; i++) { //calculates values of f_sequence_length(-1) and f_sequence_length(1)
-            //     endpoints_out[0] += coefficients[0][i][sequence_length] * std::pow(sample_in, i);
-            //     endpoints_out[1] += coefficients[pieces - 1][i][sequence_length] * std::pow(sample_in, i);
+            //     endpoints_out[0] += coefficients[0][i][sequence_length] * std::pow(sample_in, i); 
+            //     endpoints_out[1] += coefficients[pieces - 1][i][sequence_length] * std::pow(sample_in, i); 
             //     max_abs_f = std::max(std::abs(endpoints_out[0]),std::abs(endpoints_out[1]));
             // }
             // if (max_abs_f != 1){}
 
             // If |f(endpoints)| != 1, we need to find turning points in case max(|f|) is achieved elsewhere.
-            //
+            // 
             // See this link for one possible algorithm: https://stackoverflow.com/questions/21367517/algorithm-to-find-the-maximum-minimum-of-a-polynomial-without-graphing
 
             //     max(|f|) is the max of |f(endpoints)| and |f(turning points)|.
@@ -119,10 +132,10 @@ public:
         // Region of poly_intervals that sample_in falls into.
         //   region = 0 means sample_in is in [-1,x1].
         //   region = pieces means sample_in is in [xpieces, 1].
-        int region; 
+        int region = 0; 
 
         for (int i = 0; i < pieces; i++) {  // sets region based on sample_in value
-            if (sample_in < poly_intervals[i+1]) {
+            if (sample_in >= poly_intervals[i] && sample_in < poly_intervals[i + 1]) {
                 region = i;
             }
         }
