@@ -75,15 +75,15 @@ public:
                 }
             }
                     
-            for (int i = 0; i < pieces - 1; i++) {
+            for (int i = 1; i < pieces; i++) { //calculates joining points
                 for (int j = 0; j < degree + 1; j++) {
-                    endpoint_one[i] += coefficients[i][j][sequence_length] * std::pow(poly_intervals[i + 1], j);  // a_i * x^i
-                    endpoint_two[i] += coefficients[i][j][sequence_length] * std::pow(poly_intervals[i + 1], j);  // a_i * x^i
+                endpoint_one[i-1] += coefficients[i-1][j][sequence_length] * std::pow(poly_intervals[i], j);  // a_i * x^i
+                endpoint_two[i-1] += coefficients[i][j][sequence_length] * std::pow(poly_intervals[i], j);  // a_i * x^i
                 }
             }
 
-            for (int i = 0; i < pieces - 1; i++) {
-                coefficients[i][degree][sequence_length] -= endpoint_one[i] - endpoint_two[i]; //glues next piece continuously onto previous piece
+            for (int i = 1; i < pieces; i++) {
+                coefficients[i][degree][sequence_length] += endpoint_one[i-1] - endpoint_two[i-1]; //glues next piece continuously onto previous piece
             }
 
 
