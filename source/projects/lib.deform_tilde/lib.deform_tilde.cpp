@@ -15,7 +15,7 @@ class deform : public object<deform>, public sample_operator<2, 1> {
 private:
     // int i_seed;
     static const int pieces = 10;                       // number of different polynomials to stitch together
-    static const int sequence_length = 50;              // length of function sequence. 0 means identity function only.
+    static const int sequence_length = 1000;              // length of function sequence. 0 means identity function only.
     static const int degree = 10;                        // max degree of polynomials, too large might cause clicks. 0 = constant.
     const number coefficient_range[2] = {-10, 10}; // range of polynomial coefficients, too large might cause clicks.
     number poly_intervals[pieces+1];             // stores joining points x1,x2,...,x_pieces of polys
@@ -27,6 +27,18 @@ private:
         static std::default_random_engine e;
         static std::uniform_real_distribution<> dis(a, b); // range [-1, 1]
         return dis(e);
+    }
+
+    number polyval(number poly_coefficients[], number x, int degree) {
+    number output = 0;
+    for (int i = 0; i < degree + 1; i++) { 
+        output += poly_coefficients[i] * std::pow(x, i);  // a_i * x^i
+    }
+    return output;
+
+    // a + bx + cx^2 + dx^3 <-> poly_coefficients = [a, b, c, d]
+    //
+    //if f is the polynomial with coefficients poly_coefficients[], calculate f(x)    
     }
 
 public:
@@ -75,6 +87,11 @@ public:
                 }
             }
                     
+            //GLUE POLYNOMIALS TOGETHER
+
+            number endpoint_one[pieces-1];
+            number endpoint_two[pieces-1];
+
             for (int i = 1; i < pieces; i++) { //calculates joining points
                 for (int j = 0; j < degree + 1; j++) {
                 endpoint_one[i-1] += coefficients[i-1][j][sequence_length] * std::pow(poly_intervals[i], j);  // a_i * x^i
@@ -84,35 +101,85 @@ public:
 
             for (int i = 1; i < pieces; i++) {
                 coefficients[i][degree][sequence_length] += endpoint_one[i-1] - endpoint_two[i-1]; //glues next piece continuously onto previous piece
+                }
+            
+            //NORMALISE FINAL CURVE
+
+            int region = 0; //region of poly_intervals that input falls into. region = 0 means input is in [-1,x1]. region = pieces means input is in [xpieces, 1].
+                
+            number temp_coefficients[degree+1]; //1d array to hold coefficients, for using polyval
+
+            for (int i = 0; i < degree + 1; i++) { //sets up polyval
+                temp_coefficients[i] = coefficients[0][i][sequence_length];
+            }
+            number maximum = polyval(temp_coefficients,-1, degree);
+
+            number minimum = maximum;
+            number sampler;
+
+            for (number j = 0; j <= 10000; j++) {
+                sampler = -1.0 + j/10000; // equivalent to np.linspace(-1, 1, num=10000)
+                for (int i = 0; i < pieces; i++) {
+                    if (sampler < poly_intervals[i+1] && sampler >= poly_intervals[i]) {
+                        region = i;
+                    }
+                }
+                for (int i = 0; i < degree + 1; i++) { //sets up polyval
+                temp_coefficients[i] = coefficients[region][i][sequence_length];
+                }
+                maximum = std::max(polyval(temp_coefficients,sampler, degree), maximum);
+                minimum = std::min(polyval(temp_coefficients,sampler, degree), minimum);
             }
 
+            for (int i = 0; i < pieces; i++) {
+                coefficients[i][degree][sequence_length] -= minimum;
+                for (int j = 0; j < degree + 1; j++) {
+                    coefficients[i][j][sequence_length] = (coefficients[i][j][sequence_length])*2/(maximum - minimum);
+                }
+                coefficients[i][degree][sequence_length] -= 1;
+            }
 
-            // RESCALE COEFFICIENT MATRIX (UNFINISHED)
+            //INTERPOLATE POLYNOMIAL COEFFICIENTS OF MIDDLE CURVES
 
-            // We need to find max(|f|) so we can rescale the polynomial to have max magnitude 1.
-            // This value is either at endpoints or at turning points.
-
-            // double endpoints_out[2] = {0, 0};
-            // double max_abs_f = 0;
-            // for (int i = 0; i < degree + 1; i++) { //calculates values of f_sequence_length(-1) and f_sequence_length(1)
-            //     endpoints_out[0] += coefficients[0][i][sequence_length] * std::pow(sample_in, i); 
-            //     endpoints_out[1] += coefficients[pieces - 1][i][sequence_length] * std::pow(sample_in, i); 
-            //     max_abs_f = std::max(std::abs(endpoints_out[0]),std::abs(endpoints_out[1]));
-            // }
-            // if (max_abs_f != 1){}
-
-            // If |f(endpoints)| != 1, we need to find turning points in case max(|f|) is achieved elsewhere.
-            // 
-            // See this link for one possible algorithm: https://stackoverflow.com/questions/21367517/algorithm-to-find-the-maximum-minimum-of-a-polynomial-without-graphing
-
-            //     max(|f|) is the max of |f(endpoints)| and |f(turning points)|.
-            //     Once found, simply divide the coefficients by max(|f|) to obtain our rescaled function.
-
-            for (int interp = 1; interp < sequence_length; interp++) { //sets midrow coefficients to interpolated values
+            for (int interp = 1; interp < sequence_length; interp++) {
                 for (int i = 0; i < pieces; i++) {
                     for (int j = 0; j < degree + 1; j++) {
-                        coefficients[i][j][interp] = (coefficients[i][j][sequence_length] - coefficients[i][j][0]) * interp / sequence_length;
+                        coefficients[i][j][interp] = (coefficients[i][j][sequence_length] - coefficients[i][j][0]) * interp / sequence_length + coefficients[i][j][0];
                     }
+                }
+            }
+
+            //NORMALISE INTERPOLATED CURVES
+
+            for (int interp = 1; interp < sequence_length; interp++) {
+
+                for (int i = 0; i < degree + 1; i++) { //sets up polyval
+                    temp_coefficients[i] = coefficients[0][i][interp];
+                }
+                maximum = polyval(temp_coefficients,-1, degree);
+
+                minimum = maximum;
+
+                for (number j = 0; j <= 10000; j++) {
+                    sampler = -1 + j/10000; // equivalent to np.linspace(-1, 1, num=10000)
+                    for (int i = 0; i < pieces; i++) {
+                        if (sampler < poly_intervals[i+1] && sampler >= poly_intervals[i]) {
+                            region = i;
+                        }
+                    }
+                    for (int i = 0; i < degree + 1; i++) { //sets up polyval
+                    temp_coefficients[i] = coefficients[region][i][interp];
+                    }
+                    maximum = std::max(polyval(temp_coefficients,sampler, degree), maximum);
+                    minimum = std::min(polyval(temp_coefficients,sampler, degree), minimum);
+                }
+
+                for (int i = 0; i < pieces; i++) {
+                    coefficients[i][degree][interp] -= minimum;
+                    for (int j = 0; j < degree + 1; j++) {
+                        coefficients[i][j][interp] = (coefficients[i][j][interp])*2/(maximum - minimum);
+                    }
+                    coefficients[i][degree][interp] -= 1;
                 }
             }
 
