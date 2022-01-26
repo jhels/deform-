@@ -1,5 +1,16 @@
 # Min Devkit Externals
 
+## To-do
+
+* Add rescaling on final_curve so it goes between [-1,1].
+* Add Infinite Linear Oversampling.
+
+Suggested approaches to both of these in testing/deform_float.cpp.
+
+* Add attributes to [lib.deform\~] so max degree of polynomial, coefficient range, function sequence length, and random seed can be set.
+
+## Build
+
 Make sure to initialise all the submodules after cloning this repo:
 
 ```
