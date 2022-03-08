@@ -1,4 +1,19 @@
-# Min Devkit Externals
+# deform~
+
+DSP waveshaper which uses random splines to generate its transfer function. A Max/MSP external object programmed in C++.
+
+## About
+
+[deform~] generates a random spline `fn: [-1,1] -> [-1,1]`, then a sequence of splines varying continuously from `fn` to `f1(x) = x`. Combining these functions with a parameter ranging from `1` to `n`, we obtain
+
+```
+f: [-1,1] x {1, ..., n} -> [-1,1]  
+f(x,i) = f_i(x)
+```
+
+This yields a waveshaper function whose output can be smoothly varied using the parameter. See below for sample output from an input of a sine wave, a sawtooth wave, and a triangle wave respectively.
+
+![Sample output](/testing/example.jpg)
 
 ## To-do
 
