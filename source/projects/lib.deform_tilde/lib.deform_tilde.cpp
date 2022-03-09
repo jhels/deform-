@@ -14,11 +14,11 @@ using namespace c74::min;
 class deform : public object<deform>, public sample_operator<2, 1> {
 private:
     // int i_seed;
-    static const int pieces = 10;                       // number of different polynomials to stitch together
-    static const int sequence_length = 1000;              // length of function sequence. 0 means identity function only.
-    static const int degree = 10;                        // max degree of polynomials, too large might cause clicks. 0 = constant.
-    const number coefficient_range[2] = {-10, 10}; // range of polynomial coefficients, too large might cause clicks.
-    number poly_intervals[pieces+1];             // stores joining points x1,x2,...,x_pieces of polys
+    static const int pieces = 10;                   // number of different polynomials to stitch together
+    static const int sequence_length = 127;         // length of function sequence. 0 means identity function only.
+    static const int degree = 10;                   // max degree of polynomials, too large might cause clicks. 0 = constant.
+    const number coefficient_range[2] = {-10, 10};  // range of polynomial coefficients, too large might cause clicks.
+    number poly_intervals[pieces+1];                // stores joining points x1,x2,...,x_pieces of polys
     number coefficients[pieces][degree+1][sequence_length+1]; // stores matrix of poly coefficients, initialised at 0.
     number endpoint_one[pieces-1];
     number endpoint_two[pieces-1];
@@ -48,7 +48,7 @@ public:
     MIN_RELATED     { "jit.peek~" };
 
     inlet<>  m_inlet_audio      { this, "(signal) audio" };
-    inlet<>  m_inlet_fn         { this, "(signal) function index" };
+    inlet<>  m_inlet_fn         { this, "(signal) function index (0-127)" };
     outlet<> m_outlet_main      { this, "(signal) Sample value at index", "signal" };
 
     // attribute<number> seed { this, "seed", 0,
@@ -74,7 +74,7 @@ public:
 
             std::sort(poly_intervals, poly_intervals + pieces); //makes poly_intervals = [-1, x1, x2, ..., xpieces, 1]
 
-            for (int i = 0; i < pieces; i++) {           //sets first row f0 to [0,1,0,0,0,...,0] -> f0 = x.
+            for (int i = 0; i < pieces; i++) {                  //sets first row f0 to [0,1,0,0,0,...,0] -> f0 = x.
                 for (int j = 0; j < degree + 1; j++) {
                     coefficients[i][j][0] = 0;
                 }
