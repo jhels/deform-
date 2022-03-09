@@ -17,7 +17,6 @@ This yields a waveshaper function whose output can be smoothly varied using the 
 
 ## To-do
 
-* Add linear interpolation between index values. e.g. index input of, say, 5.6, returns the value `0.4 * f(5) + 0.6 * f(6)`.
 * Add Infinite Linear Oversampling to resolve aliasing issues. Suggested approach to this in testing/deform_float.cpp.
 
 * Add attributes to [lib.deform\~] so number of polynomial pieces in spline, and random seed, can be set in the object.

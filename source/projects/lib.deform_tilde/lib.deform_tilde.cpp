@@ -188,7 +188,8 @@ public:
     };
 
     sample operator()(sample sample_in, sample fn) {
-        int fn_index = static_cast<int>(fn);
+        int fn_index = floor(fn);                   //linear interpolation for float index
+        number index_interp = 1 - std::fmod(fn, 1); //
 
         if (fn_index < 0) {
             fn_index = 0;
@@ -210,7 +211,7 @@ public:
         number sample_out = 0;
 
         for (int i = 0; i < degree + 1; i++) {
-            sample_out += coefficients[region][i][fn_index] * std::pow(sample_in, i);  // a_i * x^i
+            sample_out += index_interp * coefficients[region][i][fn_index] * std::pow(sample_in, i) + (1 - index_interp) * coefficients[region][i][fn_index+1] * std::pow(sample_in, i);  // a_i * x^i
         }
 
         return sample_out;
