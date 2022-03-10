@@ -15,6 +15,8 @@ This yields a waveshaper function whose output can be smoothly varied using the 
 
 ![Sample output](/testing/example.jpg)
 
+https://github.com/jhels/deform-/blob/main/testing/demo.mp4
+
 ## To-do
 
 * Add Infinite Linear Oversampling to resolve aliasing issues. Suggested approach to this in testing/deform_float.cpp.
