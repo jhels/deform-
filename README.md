@@ -15,7 +15,7 @@ This yields a waveshaper function whose output can be smoothly varied using the 
 
 ![Sample output](https://user-images.githubusercontent.com/11036537/157645129-86b42829-dd46-475b-b6e4-d68513e04169.jpg)
 
-https://user-images.githubusercontent.com/11036537/157646321-e140ce73-df9b-4fa8-8d46-21684bca4d9a.mp4
+https://user-images.githubusercontent.com/11036537/157646723-583e20cb-5d01-4b1c-b530-0e964a5b32f0.mp4
 
 ## To-do
 
