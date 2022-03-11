@@ -7,7 +7,6 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
-#include <chrono>
 #include "c74_min.h"
 
 using namespace c74::min;
@@ -26,7 +25,7 @@ private:
 
     number get_random(number a, number b) {
         if (seed = 0) {
-            seed = chrono::steady_clock::now().time_since_epoch().count(); // if seed = 0, randomly generate coefficients using clock time
+            seed = rand(); // if seed = 0, randomly generate coefficients
         }
         static std::default_random_engine e(seed);
         static std::uniform_real_distribution<> dis(a, b); // range [-1, 1]
@@ -55,7 +54,7 @@ public:
         description {"seed"},
         setter { MIN_FUNCTION {
             number in = args[0];
-            i_seed = static_cast<int>(in);
+            int i_seed = static_cast<int>(in);
             return args;
         }}
     };
