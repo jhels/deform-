@@ -45,11 +45,11 @@ git submodule update --init --recursive
 
 #### build on Windows
 
-1. Have Visual Studio installed then run `cmake --help` to get a list of the available generators. Pick the one that corresponds to the Visual Studio version installed e.g. `"Visual Studio 16 2019"`, then run:
+1. Have Visual Studio installed then run `cmake --help` to get a list of the available generators. Pick the one that corresponds to the Visual Studio version installed e.g. `"Visual Studio 17 2022"`, then run:
 	```
 	mkdir build
 	cd build
-	cmake -G "Visual Studio 16 2019" ..
+	cmake -G "Visual Studio 17 2022" ..
 	```
 2. Open up one of the Visual Studo project files, either the main one in `build/` or one for a specific external (e.g. in `build/source/projects/lib.deform_tilde/`).
-3. In the menu bar, click something along the lines of 'Build > Run Build'. The compiled externals can be found in `externals/`.
+3. In the menu bar, click 'Build > Build Solution'. The compiled externals can be found in `externals/`.
