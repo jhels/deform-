@@ -6,8 +6,8 @@ DSP waveshaper which uses random splines to generate its transfer function. A Ma
 
 [deform~] generates a random spline $f_n: [-1,1] \rightarrow [-1,1]$, then a sequence of splines varying continuously from $f_n$ to $f_1(x) = x$. Combining these functions with an `Intensity` parameter ranging from $1$ to $n$, we obtain
 
-$$f: [-1,1] \times \lbrace 1, \dots, n\rbrace \rightarrow [-1,1]\\
-f(x,i) = f_i(x)$$
+$$\begin{aligned}f: [-1,1] \times \lbrace 1, \dots, n\rbrace \rightarrow [-1,1]\\
+f(x,i) = f_i(x)\end{aligned}$$
 
 This yields a waveshaper function whose output can be smoothly varied using the parameter. See below for sample output from an input of a sine wave, a sawtooth wave, and a triangle wave respectively.
 
