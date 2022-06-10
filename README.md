@@ -4,7 +4,7 @@ DSP waveshaper which uses random splines to generate its transfer function. A Ma
 
 ## About
 
-[deform~] generates a random spline $f_n: [-1,1] \rightarrow [-1,1]$, then a sequence of splines varying continuously from $f_n$ to $f_1(x) = x$. Combining these functions with an `Intensity` parameter ranging from $1$ to $n$, we obtain
+[deform~] generates a random spline $f_n: [-1,1] \rightarrow [-1,1]$, then a sequence of splines varying continuously from $f_n$ to $f_1(x) = x$. Combining these functions with an `Intensity` parameter $i\in[1,\dots,n]$, we obtain
 
 $$\begin{aligned}f: [-1,1] \times \lbrace 1, \dots, n\rbrace &\rightarrow [-1,1]\\
 f(x,i) &= f_i(x)\end{aligned}$$
