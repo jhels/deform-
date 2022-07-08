@@ -19,7 +19,7 @@ https://user-images.githubusercontent.com/11036537/157646723-583e20cb-5d01-4b1c-
 
 * Add Infinite Linear Oversampling to resolve aliasing issues. Suggested approach to this in testing/deform_float.cpp.
 
-* Add attributes to [lib.deform\~] so number of polynomial pieces in spline, and random seed, can be set in the object.
+* Add attributes to [deform\~] so number of polynomial pieces in spline, and random seed, can be set in the object.
 
 ## Build
 
