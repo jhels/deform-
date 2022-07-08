@@ -49,5 +49,5 @@ git submodule update --init --recursive
 	cd build
 	cmake -G "Visual Studio 17 2022" ..
 	```
-2. Open up the Visual Studo project file, `lib.deform_tilde.sln`, in `build/source/projects/lib.deform_tilde/`.
-3. In the menu bar, click 'Build > Build Solution'. The compiled object, `lib.deform.maxpat`, can be found in `externals/`.
+2. Open up the Visual Studo project file, `deform_tilde.sln`, in `build/source/projects/deform_tilde/`.
+3. In the menu bar, click 'Build > Build Solution'. The compiled object, `deform.maxpat`, can be found in `externals/`.
