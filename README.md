@@ -2,6 +2,8 @@
 
 DSP waveshaper which uses random splines to generate its transfer function. A Max/MSP external object programmed in C++.
 
+This project is no longer being updated. The new version of this audio effect will be coded as a VST instead of a Max/MSP external, and written in JUCE. 
+
 ## About
 
 [deform~] generates a random spline $f_n: [-1,1] \rightarrow [-1,1]$, then a sequence of splines varying continuously from $f_n$ to $f_1(x) = x$. Combining these functions with an `Intensity` parameter $i\in[1,\dots,n]$, we obtain
@@ -14,12 +16,6 @@ This yields a waveshaper function whose output can be smoothly varied using the 
 ![Sample output](https://user-images.githubusercontent.com/11036537/157645129-86b42829-dd46-475b-b6e4-d68513e04169.jpg)
 
 https://user-images.githubusercontent.com/11036537/157646723-583e20cb-5d01-4b1c-b530-0e964a5b32f0.mp4
-
-## To-do
-
-* Add Infinite Linear Oversampling to resolve aliasing issues. Suggested approach to this in testing/deform_float.cpp.
-
-* Add attributes to [deform\~] so number of polynomial pieces in spline, and random seed, can be set in the object.
 
 ## Build
 
