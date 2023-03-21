@@ -4,6 +4,7 @@ DSP waveshaper which uses random splines to generate its transfer function. A Ma
 
 
 * The fully functional Max/MSP external is located at `/externals/deform~.mxe64`.
+  * Note: changes to [min-devkit](https://github.com/Cycling74/min-devkit/tree/00fbf24c39169280f237c608892e402fcd1f53d9) made for Apple Silicon mean that this external will need to be rebuilt for Max 8.2 onwards.
 * The associated C++ code is located at `/source/projects/deform_tilde/deform_tilde.cpp`.
 
 ## About
