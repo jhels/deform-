@@ -20,6 +20,8 @@ This yields a waveshaper function whose output can be smoothly varied using the 
 
 https://user-images.githubusercontent.com/11036537/157646723-583e20cb-5d01-4b1c-b530-0e964a5b32f0.mp4
 
+You can read the (very basic) whitepaper I wrote up for the idea [here](./ContinuousDeformation.pdf).
+
 ## Build
 
 Make sure to initialise all the submodules after cloning this repo:
